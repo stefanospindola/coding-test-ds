@@ -3,7 +3,6 @@
 
 
 def get_model():
-    test=None
     return None
 
 
