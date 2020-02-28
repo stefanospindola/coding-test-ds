@@ -2,13 +2,12 @@ import argparse
 import logging
 from os import listdir, path
 
+import pandas as pd
 import numpy as np
 
 from file_evaluation import evaluate_file
 
-
 logger = logging.getLogger()
-
 
 def main():
     args = get_arguments()
@@ -20,7 +19,6 @@ def main():
     score = get_rms(errors)
     logger.info('Your score was %f', score)
 
-
 def get_rms(values):
     """
     Returns the root-mean-square of a numpy array
@@ -31,20 +29,17 @@ def get_rms(values):
     """
     return np.sqrt(np.mean(values**2))
 
-
 def get_files_in_folder(folder_name):
     for file_name in listdir(folder_name):
         file_path = path.join(folder_name, file_name)
         if path.isfile(file_path):
             yield file_path
 
-
 def set_logger(debug_level):
     if debug_level:
         logging.basicConfig(level=logging.DEBUG)
     else:
         logging.basicConfig(level=logging.INFO)
-
 
 def get_arguments():
     parser = argparse.ArgumentParser(description='Process some integers.')

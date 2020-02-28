@@ -1,4 +1,3 @@
-from __future__ import print_function
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -14,16 +13,15 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_squared_error
 
 import lightgbm as lgb
-
-from sklearn.externals import joblib
+import joblib
 
 from file_evaluation import evaluate_file
 
 
 logger = logging.getLogger()
-
-features = ['arrival_time','assessment_start_time','assessment_end_time','temperature','priority','pain','patient_number_in','priority_cumcount','pain_cumcount','priority_pain_cumcount','patient_number_waiting_consulting','doctor_free']
-label = 'consultation_end_time'
+features = ['arrival_time','assessment_start_time','assessment_end_time','temperature','priority','pain']
+# features = ['arrival_time','assessment_start_time','assessment_end_time','temperature','priority','pain','patient_number_in','priority_cumcount','pain_cumcount','priority_pain_cumcount','patient_number_waiting_consulting','doctor_free']
+label = 'target'
 
 
 def main():
@@ -73,17 +71,18 @@ def summary(df):
     df['temperature'] = df["assessment_3"].str.split("|", n = 2, expand = True)[1].astype('float64').round(1)
     df['priority'] = df["assessment_3"].str.split("|", n = 2, expand = True)[0]
     df['pain'] = df["assessment_3"].str.split("|", n = 2, expand = True)[2]
-    df['patient_number'] = df.groupby('day').cumcount() + 1
-    df['priority_cumcount'] = df.groupby(['day','priority']).cumcount()+1
-    df['pain_cumcount'] = df.groupby(['day','pain']).cumcount()+1
-    df['priority_pain_cumcount'] = df.groupby(['day','priority','pain']).cumcount()+1
+    # df['patient_number'] = df.groupby('day').cumcount() + 1
+    # df['priority_cumcount'] = df.groupby(['day','priority']).cumcount()+1
+    # df['pain_cumcount'] = df.groupby(['day','pain']).cumcount()+1
+    # df['priority_pain_cumcount'] = df.groupby(['day','priority','pain']).cumcount()+1
     df.priority = df.priority.astype('category').cat.codes
     df.pain = df.pain.astype('category').cat.codes
-    patient_out = number_out(df, 'assessment_end_time', 'consultation_end_time')
-    df['patient_number_in'] = [i-j for i,j in zip(df.patient_number.to_list(),patient_out)]
-    number_patient_enter_consultation_since_assessment_end = number_out(df, 'assessment_end_time', 'consultation_start_time')
-    df['patient_number_waiting_consulting'] = [i-j for i,j in zip(df.patient_number.to_list(),number_patient_enter_consultation_since_assessment_end)]
-    df['doctor_free'] = df.apply(lambda x: (6 - (x.patient_number_in - x.patient_number_waiting_consulting)), axis = 1)
+    # patient_out = number_out(df, 'assessment_end_time', 'consultation_end_time')
+    # df['patient_number_in'] = [i-j for i,j in zip(df.patient_number.to_list(),patient_out)]
+    # number_patient_enter_consultation_since_assessment_end = number_out(df, 'assessment_end_time', 'consultation_start_time')
+    # df['patient_number_waiting_consulting'] = [i-j for i,j in zip(df.patient_number.to_list(),number_patient_enter_consultation_since_assessment_end)]
+    # df['doctor_free'] = df.apply(lambda x: (6 - (x.patient_number_in - x.patient_number_waiting_consulting)), axis = 1)
+    df['target'] = df.apply(lambda x: (x.consultation_end_time - x.assessment_end_time), axis = 1)
     df.drop(columns = ['assessment_1', 'assessment_2', 'assessment_3','assessment_4', 'assessment_5', 'day_2', 'day_3', 'day_4', 'day_5', 'event_1', 'event_2', 'event_3', 'event_4', 'event_5'], inplace=True)
     return df
 
@@ -188,7 +187,6 @@ def get_arguments():
     parser.add_argument('--debug', action='store_true')
     args = parser.parse_args()
     return args
-
 
 if __name__ == '__main__':
     main()
