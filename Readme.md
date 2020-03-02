@@ -46,6 +46,8 @@ days.
 
 ## Presentation
 
+https://docs.google.com/presentation/d/1ES9CpPzvu8dh8BQS_uOh8EMGcyRN-s_u-VcHCC4bukk/edit?usp=sharing
+
 
 
 
