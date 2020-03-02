@@ -1,4 +1,4 @@
-patient,day,arrival_time,assessment_start_time,assessment_end_time,consultation_start_time,consultation_end_time,temperature,priority,pain,target
+patient,day,arrived,assessment_initiated,assessment_concluded,consultation_initiated,consultation_finished,temperature,priority,pain,target
 1,1,280,308,741,773,1620,36.6,1,1,879
 2,1,288,764,851,905,1881,36.7,0,2,1030
 3,1,430,878,1055,1084,1595,36.8,0,2,540

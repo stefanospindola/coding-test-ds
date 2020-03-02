@@ -2,10 +2,8 @@ import logging
 import math
 
 import pandas as pd
-from sklearn.externals import joblib
 
-from your_model import get_estimate, get_features, get_model, get_state_machine, update_state
-#  Place your model in a module name called 'your_model' in the same folder as this file
+from my_model import get_estimate, get_features, get_model, get_state_machine, update_state
 
 
 ESTIMATION_EVENT = 'assessment concluded'
@@ -37,7 +35,6 @@ def get_estimation_estimated_times(model, state_machine, event):
     features = get_features(state_machine, event.patient)
     estimated_time = get_estimate(model, features)
     estimation_time = event.time
-    # assert (estimated_time > estimation_time)
     return estimation_time, estimated_time
 
 
