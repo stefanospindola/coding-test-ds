@@ -32,6 +32,15 @@ def main():
     save_model(lgbm)
   
 def summary(df):
+    '''
+    summarize data for training
+
+    Args:
+    df (dataframe): data to summarize
+
+    Return:
+    df (dataframe): data suummarized
+    '''
     df['event_number'] = (df.groupby(['day','patient']).cumcount() + 1).astype(str)
     df = df.set_index(['patient','event_number']).unstack()
     df.sort_index(axis = 1,level = 1, inplace=True)
@@ -53,6 +62,17 @@ def summary(df):
     return df
 
 def split_train_test(df, last_ndays):
+    '''
+    split data in train and test
+
+    Args:
+    df (dataframe): data to split
+    last_ndays (int): number of last days to split
+
+    Return:
+    train (dataframe): train data
+    test (dataframe): test data
+    '''
     train = df[df.day<=df.day.nunique()-last_ndays]
     test  = df[df.day>df.day.nunique()-last_ndays]
     train.to_csv('train/train.csv',index=False)
@@ -60,10 +80,31 @@ def split_train_test(df, last_ndays):
     return train, test
 
 def rmsle(y_true, y_pred):
+    '''
+    rmsle metric
+
+    Args:
+    y_true(): true target
+    y_pred(): predicted target
+
+    Return:
+    rmsle (float): rmsle metric
+    '''
     assert len(y_true) == len(y_pred)
     return np.sqrt(np.mean(np.power(np.log1p(y_true + 1) - np.log1p(y_pred + 1), 2)))
 
 def train_lgbm(train, train_labels):
+    '''
+    train lightgbm model
+
+    Args:
+    train(): train data
+    train_label(): train target
+
+    Return:
+    lgbm(): model
+    lgb(): lightgbm method
+    '''
     train_data = lgb.Dataset(train, label = train_labels)
     # Selecting hyperparameters
     params = {'boosting_type': 'gbdt',
