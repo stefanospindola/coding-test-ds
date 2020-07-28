@@ -1,4 +1,4 @@
-# Data Scientist
+# Data Science
 
 ## The problem - Consultation finishing time estimation at a clinic
 
