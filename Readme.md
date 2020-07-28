@@ -1,4 +1,4 @@
-# Coding Challenge - Data Scientist
+# Data Scientist
 
 ## The problem - Consultation finishing time estimation at a clinic
 
@@ -43,10 +43,6 @@ days.
 1. Run ```. env/bin/activate``` (commands might differ depending on your OS)
 1. Run ```pip3 install -r requirements.txt```
 1. Run ```python3 evaluate.py data_test/```
-
-## Presentation
-
-https://docs.google.com/presentation/d/1ES9CpPzvu8dh8BQS_uOh8EMGcyRN-s_u-VcHCC4bukk/edit?usp=sharing
 
 
 
